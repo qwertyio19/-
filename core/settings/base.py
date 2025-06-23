@@ -4,6 +4,7 @@ from datetime import timedelta
 from django.utils.translation import gettext_lazy as _
 from core.settings.jazzmin import JAZZMIN_SETTINGS
 
+from corsheaders.defaults import default_methods, default_headers
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -11,6 +12,7 @@ load_dotenv()
 DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 SECRET_KEY = os.environ.get("SECRET_KEY")
+
 
 ALLOWED_HOSTS = ['*']
 
@@ -40,7 +42,6 @@ DJANGO_APPS = [
 ]
 
 MY_APPS = [
-    # приложения
     'app.users',
     'app.pro_activity',
     'app.afisha',
@@ -110,11 +111,11 @@ DATABASES = {
 }
 
 CKEDITOR_UPLOAD_PATH = "uploads/"
-CKEDITOR_JQUERY_URL = '//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js'  # URL to jQuery
-CKEDITOR_IMAGE_BACKEND = "pillow"  # Путь к пакету Pillow для обработки изображений
+CKEDITOR_JQUERY_URL = '//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js'
+CKEDITOR_IMAGE_BACKEND = "pillow" 
 CKEDITOR_CONFIGS = {
     'default': {
-        'toolbar': 'Custom',  # Вы можете настроить свою собственную панель инструментов CKEditor
+        'toolbar': 'Custom',  
         'height': 300,
         'width': 800,
     },
@@ -182,19 +183,15 @@ USE_L10N = True
 
 USE_TZ = True
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'nurlanuuulubeksultan@gmail.com'
-EMAIL_HOST_PASSWORD = 'vmhmedyudrpswudj'
+EMAIL_BACKEND = os.environ.get("EMAIL_BACKEND", "django.core.mail.backends.console.EmailBackend")
+EMAIL_HOST = os.environ.get("EMAIL_HOST", "smtp.gmail.com")
+EMAIL_PORT = int(os.environ.get("EMAIL_PORT", 587))
+EMAIL_USE_TLS = os.environ.get("EMAIL_USE_TLS", "True") == "True"
+EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER", "")
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD", "")
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-
-CORS_ALLOW_ALL_ORIGINS = True
-
-from corsheaders.defaults import default_methods, default_headers
 
 CORS_ALLOW_METHODS = list(default_methods)
 CORS_ALLOW_HEADERS = list(default_headers)
@@ -228,36 +225,3 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'back_static')
 
 MEDIA_URL = "back_media/"
 MEDIA_ROOT = BASE_DIR/"back_media"
-
-
-
-CORS_ALLOWED_ORIGINS = [
-    'http://192.168.31.6:8000',
-    "http://localhost:3000",
-    'http://localhost:5173',
-    'http://192.168.31.6:5173',
-    'https://d3a4-158-181-248-104.ngrok-free.app',
-]
-
-CORS_ALLOWED_METHODS = [
-    "GET", "POST", 'DELETE'
-]
-
-CORS_ALLOW_HEADERS = [
-    "accept",
-    "authorization",
-    "content-type",
-    "user-agent",
-    "x-csrftoken",
-    "x-requested-with",
-]
-
-CORS_ALLOW_CREDENTIALS = True
-
-CSRF_TRUSTED_ORIGINS = [
-    'http://192.168.31.6:8000',
-    "http://localhost:3000",
-    'http://localhost:5173',
-    'http://192.168.31.6:5173',
-    'https://d3a4-158-181-248-104.ngrok-free.app',
-]
